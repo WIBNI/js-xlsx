@@ -13057,7 +13057,13 @@ function write_ws_xml_sheetviews(ws, opts, idx, wb) {
 	var sview = {workbookViewId:"0"};
 	// $FlowIgnore
 	if( (((wb||{}).Workbook||{}).Views||[])[0] ) sview.rightToLeft = wb.Workbook.Views[0].RTL ? "1" : "0";
-	return writextag("sheetViews", writextag("sheetView", null, sview), {});
+	return writextag("sheetViews", writextag("sheetView",
+		ws['!freeze']?`
+                <pane xSplit="0" ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>
+                <selection pane="topLeft" activeCell="A1" activeCellId="0" sqref="A1"/>
+                <selection pane="bottomLeft" activeCell="A1" activeCellId="0" sqref="1:1"/>
+		`:null
+, sview), {});
 }
 
 function write_ws_xml_cell(cell, ref, ws, opts) {
